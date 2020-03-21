@@ -91,7 +91,7 @@ class _NewTransactionState extends State<NewTransaction> {
                       ),
                     ),
                     AdaptiveFlatButton(
-                      text: 'Chosen Date',
+                      text: 'Choose Date',
                       onPressHandler: _openDatePicker,
                     ),
                   ],
@@ -99,7 +99,7 @@ class _NewTransactionState extends State<NewTransaction> {
               ),
               RaisedButton(
                 onPressed: _submitTransaction,
-                child: Text('Add Transaction'),
+                child: const Text('Add Transaction'),
                 color: Theme.of(context).primaryColor,
                 textColor: Theme.of(context).textTheme.button.color,
               )
