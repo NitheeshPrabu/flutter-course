@@ -26,10 +26,21 @@ class MyApp extends StatelessWidget {
               ),
             ),
       ),
-      home: CategoriesScreen(), // marks the root screen of the app
+      // home: CategoriesScreen(), // marks the root screen of the app
+      initialRoute: '/', // default is '/'
       routes: {
+        '/': (ctx) => CategoriesScreen(), // added by default if not specified
         CategoryMealsScreen.routeName: (ctx) => CategoryMealsScreen(),
         MealDetailScreen.routeName: (ctx) => MealDetailScreen(),
+      },
+      onGenerateRoute: (settings) {
+        // returns to this default route if a invalid named route was pushed.
+        return MaterialPageRoute(builder: (ctx) => CategoriesScreen());
+      },
+      onUnknownRoute: (settings) {
+        // like a generic 404 fallback page. gets called when named route push fails to find the route,
+        // and there is no onGenerateRoute defined.
+        return MaterialPageRoute(builder: (ctx) => CategoriesScreen());
       },
     );
   }
