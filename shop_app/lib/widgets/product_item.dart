@@ -7,8 +7,12 @@ import '../providers/product_provider.dart';
 class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final product = Provider.of<ProductProvider>(context);
+    final product = Provider.of<ProductProvider>(context, listen: false);
 
+    // Consumer generally used to re-render parts of the widget tree. Can wrap around the required
+    // widgets so that only they re-render. In this case, only the icon needs the data from the provider,
+    // so we are wrapping only the icon with the consumer, forcing only the icon to re-render instead of the,
+    // entire widget.
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
@@ -25,14 +29,18 @@ class ProductItem extends StatelessWidget {
           ),
         ),
         footer: GridTileBar(
-          leading: IconButton(
-            icon: Icon(
-              product.isFavourite ? Icons.favorite : Icons.favorite_border,
+          leading: Consumer<ProductProvider>(
+            // child is used when you have parts that shouldn't update inside the
+            // Consumer builder.
+            builder: (ctx, product, child) => IconButton(
+              icon: Icon(
+                product.isFavourite ? Icons.favorite : Icons.favorite_border,
+              ),
+              color: Theme.of(context).accentColor,
+              onPressed: () {
+                product.toggleFavouriteStatus();
+              },
             ),
-            color: Theme.of(context).accentColor,
-            onPressed: () {
-              product.toggleFavouriteStatus();
-            },
           ),
           trailing: IconButton(
             icon: Icon(Icons.shopping_cart),
