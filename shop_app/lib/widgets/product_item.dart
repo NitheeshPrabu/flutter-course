@@ -3,11 +3,13 @@ import 'package:provider/provider.dart';
 
 import '../screens/product_detail_screen.dart';
 import '../providers/product_provider.dart';
+import '../providers/cart_provider.dart';
 
 class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final product = Provider.of<ProductProvider>(context, listen: false);
+    final cart = Provider.of<CartProvider>(context, listen: false);
 
     // Consumer generally used to re-render parts of the widget tree. Can wrap around the required
     // widgets so that only they re-render. In this case, only the icon needs the data from the provider,
@@ -45,7 +47,9 @@ class ProductItem extends StatelessWidget {
           trailing: IconButton(
             icon: Icon(Icons.shopping_cart),
             color: Theme.of(context).accentColor,
-            onPressed: () {},
+            onPressed: () {
+              cart.addItem(product.id, product.price, product.title);
+            },
           ),
           backgroundColor: Colors.black87,
           title: Text(
