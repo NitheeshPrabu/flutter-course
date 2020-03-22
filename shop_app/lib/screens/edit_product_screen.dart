@@ -91,8 +91,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
       return;
     }
     _form.currentState.save();
-    Provider.of<ProductsProvider>(context, listen: false)
-        .addProduct(_editedProduct);
+    if (_editedProduct.id == null) {
+      Provider.of<ProductsProvider>(context, listen: false)
+          .addProduct(_editedProduct);
+    } else {
+      Provider.of<ProductsProvider>(context, listen: false)
+          .updateProduct(_editedProduct.id, _editedProduct);
+    }
     Navigator.of(context).pop();
   }
 
@@ -135,6 +140,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     description: _editedProduct.description,
                     imageUrl: _editedProduct.imageUrl,
                     price: _editedProduct.price,
+                    isFavourite: _editedProduct.isFavourite,
                   );
                 },
               ),
@@ -164,6 +170,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     id: _editedProduct.id,
                     description: _editedProduct.description,
                     imageUrl: _editedProduct.imageUrl,
+                    isFavourite: _editedProduct.isFavourite,
                   );
                 },
               ),
@@ -188,6 +195,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     title: _editedProduct.title,
                     imageUrl: _editedProduct.imageUrl,
                     price: _editedProduct.price,
+                    isFavourite: _editedProduct.isFavourite,
                   );
                 },
               ),
@@ -244,6 +252,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           description: _editedProduct.description,
                           title: _editedProduct.title,
                           price: _editedProduct.price,
+                          isFavourite: _editedProduct.isFavourite,
                         );
                       },
                     ),
