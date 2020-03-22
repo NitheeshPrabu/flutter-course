@@ -31,12 +31,13 @@ class UserProductItem extends StatelessWidget {
               color: Theme.of(context).primaryColor,
             ),
             IconButton(
-                icon: Icon(Icons.delete),
-                onPressed: () {
-                  Provider.of<ProductsProvider>(context, listen: false)
-                      .deleteProduct(productId);
-                },
-                color: Theme.of(context).errorColor)
+              icon: Icon(Icons.delete),
+              onPressed: () {
+                Provider.of<ProductsProvider>(context, listen: false)
+                    .deleteProduct(productId);
+              },
+              color: Theme.of(context).errorColor,
+            )
           ],
         ),
       ),
