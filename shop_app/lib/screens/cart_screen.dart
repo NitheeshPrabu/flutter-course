@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../providers/cart_provider.dart'
     show CartProvider; // this will selective import CartProvider
 import '../widgets/cart_item.dart' as CartItemWidget; // this allows namespacing
+import '../providers/orders_provider.dart';
 
 class CartScreen extends StatelessWidget {
   static const routeName = '/cart';
@@ -32,7 +33,7 @@ class CartScreen extends StatelessWidget {
                   Spacer(),
                   Chip(
                     label: Text(
-                      '\$${cart.totalAmount}',
+                      '\$${cart.totalAmount.toStringAsFixed(2)}',
                       style: TextStyle(
                         color: Theme.of(context).textTheme.title.color,
                       ),
@@ -41,7 +42,12 @@ class CartScreen extends StatelessWidget {
                   ),
                   FlatButton(
                     child: const Text('ORDER NOW!'),
-                    onPressed: () {},
+                    onPressed: () {
+                      Provider.of<OrdersProvider>(context, listen: false)
+                          .addOrder(
+                              cart.items.values.toList(), cart.totalAmount);
+                      cart.clearCart();
+                    },
                     textColor: Theme.of(context).primaryColor,
                   ),
                 ],
