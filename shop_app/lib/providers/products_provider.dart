@@ -8,6 +8,9 @@ import '../models/HttpException.dart';
 
 class ProductsProvider with ChangeNotifier {
   List<ProductProvider> _items = [];
+  final String token;
+
+  ProductsProvider(this.token, this._items);
 
   List<ProductProvider> get items {
     return [..._items];
@@ -22,7 +25,8 @@ class ProductsProvider with ChangeNotifier {
   }
 
   Future<void> fetchAndSetProducts() async {
-    const url = 'https://flutter-shopapp-c1d1b.firebaseio.com/products.json';
+    final url =
+        'https://flutter-shopapp-c1d1b.firebaseio.com/products.json?auth=$token';
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
@@ -48,7 +52,8 @@ class ProductsProvider with ChangeNotifier {
   }
 
   Future<void> addProduct(ProductProvider product) async {
-    const url = 'https://flutter-shopapp-c1d1b.firebaseio.com/products.json';
+    final url =
+        'https://flutter-shopapp-c1d1b.firebaseio.com/products.json?auth=$token';
     try {
       final response = await http.post(url,
           body: json.encode({
@@ -74,7 +79,7 @@ class ProductsProvider with ChangeNotifier {
 
   Future<void> updateProduct(String id, ProductProvider newProduct) async {
     final url =
-        'https://flutter-shopapp-c1d1b.firebaseio.com/products/$id.json';
+        'https://flutter-shopapp-c1d1b.firebaseio.com/products/$id.json?auth=$token';
     await http.patch(url,
         body: json.encode({
           'title': newProduct.title,
@@ -92,7 +97,7 @@ class ProductsProvider with ChangeNotifier {
 
   Future<void> deleteProduct(String id) async {
     final url =
-        'https://flutter-shopapp-c1d1b.firebaseio.com/products/$id.json';
+        'https://flutter-shopapp-c1d1b.firebaseio.com/products/$id.json?auth=$token';
     final existingProductIndex =
         _items.indexWhere((product) => product.id == id);
     var existingProduct = _items[existingProductIndex];
