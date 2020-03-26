@@ -9,8 +9,9 @@ import '../models/HttpException.dart';
 class ProductsProvider with ChangeNotifier {
   List<ProductProvider> _items = [];
   final String token;
+  final String userId;
 
-  ProductsProvider(this.token, this._items);
+  ProductsProvider(this.token, this.userId, this._items);
 
   List<ProductProvider> get items {
     return [..._items];
@@ -24,15 +25,21 @@ class ProductsProvider with ChangeNotifier {
     return _items.firstWhere((item) => item.id == id);
   }
 
-  Future<void> fetchAndSetProducts() async {
-    final url =
-        'https://flutter-shopapp-c1d1b.firebaseio.com/products.json?auth=$token';
+  Future<void> fetchAndSetProducts([bool filterByUser = false]) async {
+    final filterString =
+        filterByUser ? '&orderBy="creatorId"&equalTo="$userId"' : '';
+    var url =
+        'https://flutter-shopapp-c1d1b.firebaseio.com/products.json?auth=$token$filterString';
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       if (extractedData == null) {
         return;
       }
+      url =
+          'https://flutter-shopapp-c1d1b.firebaseio.com/userFavourites/$userId.json?auth=$token';
+      final favouriteResponse = await http.get(url);
+      final favouriteData = json.decode(favouriteResponse.body);
       final List<ProductProvider> loadedProducts = [];
       extractedData.forEach((productId, productData) {
         loadedProducts.add(ProductProvider(
@@ -40,8 +47,9 @@ class ProductsProvider with ChangeNotifier {
           description: productData['description'],
           title: productData['title'],
           price: productData['price'],
-          isFavourite: productData['isFavourite'],
           imageUrl: productData['imageUrl'],
+          isFavourite:
+              favouriteData == null ? false : favouriteData[productId] ?? false,
         ));
       });
       _items = loadedProducts;
@@ -61,7 +69,7 @@ class ProductsProvider with ChangeNotifier {
             'description': product.description,
             'price': product.price,
             'imageUrl': product.imageUrl,
-            'isFavourite': product.isFavourite
+            'creatorId': userId,
           }));
       final newProduct = ProductProvider(
         description: product.description,

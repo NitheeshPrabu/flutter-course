@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
           // the provider which the proxy provider is dependent on must be declared first
           builder: (ctx, authData, previousProducts) => ProductsProvider(
               authData.token,
+              authData.userId,
               previousProducts == null ? [] : previousProducts.items),
         ),
         ChangeNotifierProvider.value(
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProxyProvider<AuthProvider, OrdersProvider>(
           builder: (ctx, authData, previousOrders) => OrdersProvider(
               authData.token,
+              authData.userId,
               previousOrders == null ? [] : previousOrders.orders),
         ),
       ],
