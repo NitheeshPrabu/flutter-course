@@ -6,6 +6,10 @@ import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart' as syspaths;
 
 class ImageInput extends StatefulWidget {
+  final Function onSelectImage;
+
+  ImageInput(this.onSelectImage);
+
   @override
   _ImageInputState createState() => _ImageInputState();
 }
@@ -18,12 +22,16 @@ class _ImageInputState extends State<ImageInput> {
       source: ImageSource.camera,
       maxWidth: 600,
     );
+    if (imageFile == null) {
+      return null;
+    }
     setState(() {
       _storedImage = imageFile;
     });
     final appDir = await syspaths.getApplicationDocumentsDirectory();
     final fileName = path.basename(imageFile.path);
     final savedImage = await imageFile.copy('${appDir.path}/$fileName');
+    widget.onSelectImage(savedImage);
   }
 
   @override
@@ -31,7 +39,7 @@ class _ImageInputState extends State<ImageInput> {
     return Row(
       children: <Widget>[
         Container(
-          width: 150,
+          width: 200,
           height: 100,
           decoration: BoxDecoration(
             border: Border.all(
