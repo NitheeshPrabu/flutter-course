@@ -1,48 +1,70 @@
 import 'package:flutter/material.dart';
 
 import '../blocs/bloc.dart';
+import '../blocs/provider.dart';
 
 class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final bloc = Provider.of(context);
+
     return Container(
       margin: const EdgeInsets.all(20.0),
       child: Column(
         children: <Widget>[
-          emailField(),
-          passwordField(),
+          emailField(bloc),
+          passwordField(bloc),
           SizedBox(height: 25.0),
-          submitButton(),
+          submitButton(bloc),
         ],
       ),
     );
   }
 
-  Widget emailField() {
-    return TextField(
-      keyboardType: TextInputType.emailAddress,
-      decoration: InputDecoration(
-        hintText: 'you@example.com',
-        labelText: 'Email Address',
-      ),
+  Widget emailField(Bloc bloc) {
+    return StreamBuilder(
+      builder: (context, snapshot) {
+        return TextField(
+          onChanged: bloc.changeEmail,
+          keyboardType: TextInputType.emailAddress,
+          decoration: InputDecoration(
+            hintText: 'you@example.com',
+            labelText: 'Email Address',
+            errorText: snapshot.error,
+          ),
+        );
+      },
+      stream: bloc.email,
     );
   }
 
-  Widget passwordField() {
-    return TextField(
-      obscureText: true,
-      decoration: InputDecoration(
-        hintText: 'password',
-        labelText: 'Password',
-      ),
+  Widget passwordField(Bloc bloc) {
+    return StreamBuilder(
+      builder: (context, snapshot) {
+        return TextField(
+          onChanged: bloc.changePassword,
+          obscureText: true,
+          decoration: InputDecoration(
+            hintText: 'password',
+            labelText: 'Password',
+            errorText: snapshot.error,
+          ),
+        );
+      },
+      stream: bloc.password,
     );
   }
 
-  Widget submitButton() {
-    return RaisedButton(
-      color: Colors.blue,
-      child: const Text('Login'),
-      onPressed: () {},
+  Widget submitButton(Bloc bloc) {
+    return StreamBuilder(
+      builder: (context, snapshot) {
+        return RaisedButton(
+          color: Colors.blue,
+          child: const Text('Login'),
+          onPressed: !snapshot.hasData ? null : bloc.submit,
+        );
+      },
+      stream: bloc.submitValid,
     );
   }
 }
