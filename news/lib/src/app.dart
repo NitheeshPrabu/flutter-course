@@ -21,11 +21,13 @@ class App extends StatelessWidget {
   Route routes(RouteSettings settings) {
     return MaterialPageRoute(
       builder: (context) {
-        final commentsBloc = CommentsProvider.of(context);
         switch (settings.name) {
           case '/':
+            final storiesBloc = StoriesProvider.of(context);
+            storiesBloc.fetchTopIds();
             return NewsList();
           default:
+            final commentsBloc = CommentsProvider.of(context);
             final itemId = int.parse(settings.name.replaceFirst('/', ''));
             commentsBloc.fetchItemWithComments(itemId);
             return NewsDetail(itemId);
