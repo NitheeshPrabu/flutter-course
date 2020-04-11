@@ -29,7 +29,7 @@ class StoriesBloc {
 
   ScanStreamTransformer<int, Map<int, Future<ItemModel>>> _itemsTransformer() {
     return ScanStreamTransformer(
-      (Map<int, Future<ItemModel>> cache, int id, _) {
+      (Map<int, Future<ItemModel>> cache, int id, int index) {
         cache[id] = _repository.fetchItem(id);
         return cache;
       },
