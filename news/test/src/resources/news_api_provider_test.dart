@@ -27,7 +27,6 @@ void main() {
   test('fetchItems returns a item model', () async {
     final newsApi = NewsApiProvider();
 
-    // replace the client with the mock client. this will intercept the calls.
     newsApi.client = MockClient((request) async {
       final jsonMap = {'id': 123};
       return Response(json.encode(jsonMap), 200);

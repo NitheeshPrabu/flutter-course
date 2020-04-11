@@ -6,9 +6,18 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 
 import '../models/item_model.dart';
+import './repository.dart';
 
-class NewsDbProvider {
+class NewsDbProvider implements Source, Cache {
   Database db;
+
+  NewsDbProvider() {
+    init();
+  }
+
+  Future<List<int>> fetchTopIds() {
+    return null;
+  }
 
   void init() async {
     Directory documentsDir = await getApplicationDocumentsDirectory();
@@ -57,3 +66,5 @@ class NewsDbProvider {
     return db.insert('Items', item.toMapForDb());
   }
 }
+
+final newsDbProvider = NewsDbProvider();
