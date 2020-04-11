@@ -17,26 +17,26 @@ class NewsListTile extends StatelessWidget {
 
     return StreamBuilder(
       stream: bloc.items,
-      builder: (ctx, AsyncSnapshot<Map<int, Future<ItemModel>>> snapshot) {
+      builder: (ctx1, AsyncSnapshot<Map<int, Future<ItemModel>>> snapshot) {
         if (!snapshot.hasData) {
           return LoadingListTile();
         }
 
         return FutureBuilder(
           future: snapshot.data[itemId],
-          builder: (ctx, AsyncSnapshot<ItemModel> itemSnapshot) {
+          builder: (ctx2, AsyncSnapshot<ItemModel> itemSnapshot) {
             if (!itemSnapshot.hasData) {
               return LoadingListTile();
             }
 
-            return buildTile(itemSnapshot.data);
+            return buildTile(itemSnapshot.data, ctx2);
           },
         );
       },
     );
   }
 
-  Widget buildTile(ItemModel item) {
+  Widget buildTile(ItemModel item, BuildContext context) {
     return Column(
       children: <Widget>[
         ListTile(
@@ -48,6 +48,9 @@ class NewsListTile extends StatelessWidget {
               Text('${item.descendants}'),
             ],
           ),
+          onTap: () {
+            Navigator.pushNamed(context, '/${item.id}');
+          },
         ),
         Divider(height: 8.0),
       ],
