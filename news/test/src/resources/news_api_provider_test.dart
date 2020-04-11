@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:http/testing.dart';
-import 'package:news/src/models/item_model.dart';
 
 // cannot do this, because it is outside the lib folder!
 //import '../../src/resources/news_api_provider_test.dart';

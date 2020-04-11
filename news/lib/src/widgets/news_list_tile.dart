@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import './loading_list_tile.dart';
 import '../models/item_model.dart';
 import '../blocs/stories_provider.dart';
 
@@ -13,25 +14,43 @@ class NewsListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = StoriesProvider.of(context);
-    bloc.fetchItem(itemId);
+
     return StreamBuilder(
       stream: bloc.items,
       builder: (ctx, AsyncSnapshot<Map<int, Future<ItemModel>>> snapshot) {
         if (!snapshot.hasData) {
-          return Text('loading');
+          return LoadingListTile();
         }
 
         return FutureBuilder(
           future: snapshot.data[itemId],
           builder: (ctx, AsyncSnapshot<ItemModel> itemSnapshot) {
             if (!itemSnapshot.hasData) {
-              return Text('$itemId loading');
+              return LoadingListTile();
             }
 
-            return Text('${itemSnapshot.data.title}');
+            return buildTile(itemSnapshot.data);
           },
         );
       },
+    );
+  }
+
+  Widget buildTile(ItemModel item) {
+    return Column(
+      children: <Widget>[
+        ListTile(
+          title: Text(item.title),
+          subtitle: Text('${item.score} points'),
+          trailing: Column(
+            children: <Widget>[
+              Icon(Icons.comment),
+              Text('${item.descendants}'),
+            ],
+          ),
+        ),
+        Divider(height: 8.0),
+      ],
     );
   }
 }

@@ -37,6 +37,10 @@ class StoriesBloc {
     );
   }
 
+  Future<void> clearCache() {
+    return _repository.clearCache();
+  }
+
   void dispose() {
     _topIds.close();
     _itemsOutput.close();

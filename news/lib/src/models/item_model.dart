@@ -43,7 +43,7 @@ class ItemModel {
         url = parsedRecord['url'],
         score = parsedRecord['score'],
         title = parsedRecord['title'],
-        descendants = parsedRecord['descendants'];
+        descendants = parsedRecord['descendants'] ?? 0;
 
   Map<String, dynamic> toMapForDb() {
     return <String, dynamic>{
